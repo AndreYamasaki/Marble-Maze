@@ -33,6 +33,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     var isGameOver = false
+    var gameOver: SKLabelNode!
     
     //MARK: - didMove
     
@@ -85,16 +86,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //Challege 1: Rewrite the loadLevel() method so that it's made up of multiple smaller methods.
                 if letter == "x" {
                     // wall
-                   loadWall()
+                   loadWall(position: position)
                 } else if letter == "v"  {
                     // vortex
-                   loadVortex()
+                   loadVortex(position: position)
                 } else if letter == "s"  {
                     // star
-                    loadStar()
+                    loadStar(position: position)
                 } else if letter == "f"  {
                     // finish
-                   loadFinish()
+                   loadFinish(position: position)
                 } else if letter == " " {
                     // this is an empty space – do nothing!
                 } else {
@@ -104,7 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func loadWall() {
+    func loadWall(position: CGPoint) {
         let node = SKSpriteNode(imageNamed: "block")
         node.position = position
 
@@ -114,7 +115,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(node)
     }
     
-    func loadVortex() {
+    func loadVortex(position: CGPoint) {
         let node = SKSpriteNode(imageNamed: "vortex")
         node.name = "vortex"
         node.position = position
@@ -131,7 +132,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(node)
     }
     
-    func loadStar() {
+    func loadStar(position: CGPoint) {
         let node = SKSpriteNode(imageNamed: "star")
         node.name = "star"
         node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2)
@@ -144,7 +145,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(node)
     }
     
-    func loadFinish() {
+    func loadFinish(position: CGPoint) {
         let node = SKSpriteNode(imageNamed: "finish")
         node.name = "finish"
         node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width / 2)
@@ -241,7 +242,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             node.removeFromParent()
             score += 1
         } else if node.name == "finish" {
-            // next level?
+            player.physicsBody?.isDynamic = false
+            gameOver = SKLabelNode(fontNamed: "ChalkDuster")
+            gameOver.text = "Congratulations"
+            gameOver.fontSize = 48
+            gameOver.horizontalAlignmentMode = .center
+            gameOver.position = CGPoint(x: 512, y: 454)
+            gameOver.zPosition = 2
+            addChild(gameOver)
         }
     }
 }
